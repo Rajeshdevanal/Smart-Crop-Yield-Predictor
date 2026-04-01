@@ -68,6 +68,9 @@
                     <div class="col-lg-6">
                         <div class="card form-panel rounded-5 shadow-lg border-0 overflow-hidden">
                             <div class="card-body p-5">
+                                <div class="hero-visual mb-4 overflow-hidden">
+                                    <img src="{{ url_for('static', filename='images/farm-hero.svg') }}" alt="Smart farm illustration">
+                                </div>
                                 <div class="d-flex align-items-center justify-content-between mb-4">
                                     <div>
                                         <h3 class="fw-bold mb-1">{{ labels.header }}</h3>
@@ -130,10 +133,11 @@
                                             <i class="fas fa-magic me-2"></i> {{ labels.predict_button }}
                                         </button>
                                     </div>
-                            <input type="hidden" name="user" value="{{ user }}">
+                                    <input type="hidden" name="user" value="{{ user }}">
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
             </div>
         </section>
 
