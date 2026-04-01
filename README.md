@@ -62,16 +62,25 @@ Then open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser.
 
 This is a Flask application and cannot be hosted directly on GitHub Pages, because GitHub Pages only supports static sites.
 
-To host the app from your GitHub repository, use a Python-friendly hosting service such as:
+To deploy the Flask app from this GitHub repo, you can use a hosting service such as:
 
+- Heroku
 - Render
 - Railway
-- Heroku
 - Azure App Service
 
-This repo includes a `requirements.txt` file and a `Procfile` so the app can be deployed to platforms that support Python web apps.
+### GitHub Actions deployment (Heroku)
 
-If you want to host the website from GitHub, keep the repository on GitHub and connect it to one of those services for automatic deployment.
+This repo now includes a GitHub Actions workflow at `.github/workflows/deploy-heroku.yml`.
+It will deploy automatically to Heroku when you push to `main`, once you configure the following repository secrets:
+
+- `HEROKU_API_KEY`
+- `HEROKU_APP_NAME`
+- `HEROKU_EMAIL`
+
+The repo already includes `requirements.txt` and `Procfile` for Python web deployment.
+
+If you want to host the website from GitHub, keep the repository here and connect it to one of those services for the actual runtime.
 
 ## Notes
 
