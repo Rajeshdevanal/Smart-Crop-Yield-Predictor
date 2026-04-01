@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ labels.get('dir', 'ltr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.result_title }} - AYP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header py-4 shadow-sm">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a href="/home?lang={{ lang }}&user={{ user }}" class="brand-link d-flex align-items-center gap-2 text-decoration-none">
+                <span class="brand-mark"><i class="fas fa-seedling"></i></span>
+                <div>
+                    <h1 class="mb-0">AYP</h1>
+                    <p class="mb-0 text-muted small">Your yield forecast partner.</p>
+                </div>
+            </a>
+            <div class="d-none d-md-flex gap-3 align-items-center">
+                <a href="/home?lang={{ lang }}&user={{ user }}" class="nav-link">Home</a>
+                <a href="/dashboard?lang={{ lang }}&user={{ user }}" class="nav-link">Dashboard</a>
+                <a href="/about?lang={{ lang }}&user={{ user }}" class="nav-link">About</a>
+                <a href="/login?lang={{ lang }}" class="nav-link">Login</a>
+            </div>
+            <a href="/home?lang={{ lang }}&user={{ user }}" class="btn btn-outline-primary btn-sm">New prediction</a>
+        </div>
+    </header>
+
+    <main class="py-6">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <div class="card result-card rounded-5 shadow-lg overflow-hidden border-0">
+                        <div class="card-body p-5 text-center">
+                            <div class="result-banner mb-4">
+                                <img src="{{ url_for('static', filename='images/plant-contact.svg') }}" alt="AYP result illustration">
+                            </div>
+                            <div class="icon-circle mb-4">
+                                <i class="fas fa-seedling fa-2x"></i>
+                            </div>
+                            <span class="badge badge-pill badge-soft mb-3">{{ labels.model_prefix }} {{ model_name }}</span>
+                            <h2 class="text-primary fw-bold mb-3">{{ labels.result_title }}</h2>
+                            <h1 class="display-1 fw-bold text-dark mb-2">{{ prediction }}</h1>
+                            <p class="lead text-muted mb-4">{{ labels.result_subtitle }}</p>
+
+                            <div class="result-summary p-4 rounded-4 bg-white shadow-sm text-start">
+                                <h5 class="fw-semibold mb-2">{{ labels.recommendation }}</h5>
+                                <p class="mb-0 text-muted">{{ labels.recommendation2 }}</p>
+                            </div>
+
+                            <a href="/home?lang={{ lang }}&user={{ user }}" class="btn btn-primary btn-lg mt-5">
+                                <i class="fas fa-arrow-left me-2"></i> {{ labels.predict_button }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer py-4">
+        <div class="container text-center text-muted small">
+            Powered by AYP • Built for confident farm planning.
+        </div>
+    </footer>
+</body>
+</html>

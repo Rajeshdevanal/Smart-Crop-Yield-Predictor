@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ labels.get('dir', 'ltr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ labels.page_title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header py-4 shadow-sm">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a href="/home?lang={{ lang }}&user={{ user }}" class="brand-link d-flex align-items-center gap-2 text-decoration-none">
+                <span class="brand-mark"><i class="fas fa-seedling"></i></span>
+                <div>
+                    <h1 class="mb-0">AYP</h1>
+                    <p class="mb-0 text-muted small">Smart yield forecasts for every farmer.</p>
+                </div>
+            </a>
+            <nav class="d-none d-md-flex gap-4 align-items-center">
+                <a href="#how-it-works" class="nav-link">How it works</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="/dashboard?lang={{ lang }}&user={{ user }}" class="nav-link">Dashboard</a>
+                <a href="/login?lang={{ lang }}" class="nav-link">Login</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section py-6">
+            <div class="container">
+                <div class="row align-items-center gx-5">
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <span class="eyebrow">{{ labels.subtitle }}</span>
+                        <h2 class="hero-title">{{ labels.description }}</h2>
+                        <p class="hero-copy">Deliver accurate crop predictions with a clean, modern dashboard built for growers and agronomists.</p>
+
+                        {% if show_welcome and user %}
+                        <div class="alert alert-success rounded-4 mt-4">
+                            <strong>Welcome, {{ user }}!</strong> Your AYP workspace is ready. Enter your field data below to begin predicting.
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-3 mt-4" id="features">
+                            <div class="col-sm-6">
+                                <div class="feature-card p-4 rounded-4 shadow-sm">
+                                    <i class="fas fa-chart-line feature-icon"></i>
+                                    <h5>Precision insights</h5>
+                                    <p>Predict yield with confidence using optimized agricultural models.</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="feature-card p-4 rounded-4 shadow-sm">
+                                    <i class="fas fa-globe feature-icon"></i>
+                                    <h5>Fast results</h5>
+                                    <p>Get predictions instantly with an intuitive, responsive interface.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex flex-wrap gap-3">
+                            <a href="/dashboard?lang={{ lang }}" class="btn btn-outline-primary btn-lg">View dashboard</a>
+                            <a href="/login?lang={{ lang }}" class="btn btn-secondary btn-lg">Login</a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="card form-panel rounded-5 shadow-lg border-0 overflow-hidden">
+                            <div class="card-body p-5">
+                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                    <div>
+                                        <h3 class="fw-bold mb-1">{{ labels.header }}</h3>
+                                        <p class="text-muted mb-0">{{ labels.help_text }}</p>
+                                    </div>
+                                    <span class="badge bg-light text-dark">AgriTech</span>
+                                </div>
+
+                                <form action="/predict" method="POST" class="row g-4">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">{{ labels.language_label }}</label>
+                                        <select id="langSelect" name="lang" class="form-select">
+                                            {% for code, language in languages.items() %}
+                                            <option value="{{ code }}" {% if code == lang %}selected{% endif %}>{{ language.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">{{ labels.fertilizer }}</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text"><i class="fas fa-seedling"></i></span>
+                                            <input type="number" step="0.01" name="Fertilizer" class="form-control" placeholder="120.5" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">{{ labels.temperature }}</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text"><i class="fas fa-temperature-high"></i></span>
+                                            <input type="number" step="0.01" name="temp" class="form-control" placeholder="28.5" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">{{ labels.nitrogen }}</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text"><i class="fas fa-vial"></i></span>
+                                            <input type="number" step="0.01" name="N" class="form-control" placeholder="80" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">{{ labels.phosphorus }}</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text"><i class="fas fa-vial"></i></span>
+                                            <input type="number" step="0.01" name="P" class="form-control" placeholder="40" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">{{ labels.potassium }}</label>
+                                        <div class="input-group shadow-sm">
+                                            <span class="input-group-text"><i class="fas fa-vial"></i></span>
+                                            <input type="number" step="0.01" name="K" class="form-control" placeholder="50" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="fas fa-magic me-2"></i> {{ labels.predict_button }}
+                                        </button>
+                                    </div>
+                            <input type="hidden" name="user" value="{{ user }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="info-section py-5" id="how-it-works">
+            <div class="container">
+                <div class="row justify-content-center text-center mb-4">
+                    <div class="col-lg-8">
+                        <h3 class="section-title">Designed for effective crop planning</h3>
+                        <p class="text-muted">Enter your field inputs and receive clean, reliable yield estimates with helpful next-step guidance.</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="info-card p-4 rounded-4 shadow-sm">
+                            <i class="fas fa-leaf fa-lg"></i>
+                            <h5>Smart analytics</h5>
+                            <p>Track nitrogen, phosphorus, potassium and temperature influence on yield.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-card p-4 rounded-4 shadow-sm">
+                            <i class="fas fa-clock fa-lg"></i>
+                            <h5>Quick decision support</h5>
+                            <p>Make faster decisions with streamlined prediction results.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-card p-4 rounded-4 shadow-sm">
+                            <i class="fas fa-shield-alt fa-lg"></i>
+                            <h5>Reliable experience</h5>
+                            <p>Built to support farmers with an intuitive, professional digital tool.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section py-5" id="about">
+            <div class="container">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6">
+                        <div class="about-image shadow-lg rounded-4 overflow-hidden">
+                            <img src="{{ url_for('static', filename='images/plant-contact.svg') }}" alt="About AYP illustration">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3 class="section-title">About AYP</h3>
+                        <p class="text-muted">AYP is built to bring fast, data-driven crop recommendations to every farm. Our platform makes complex agricultural forecasts simple and actionable.</p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-3"><strong>Modern Agriculture:</strong> Clean design, easy inputs, and instant prediction responses.</li>
+                            <li class="mb-3"><strong>Global coverage:</strong> Language support and field-ready metrics for farmers worldwide.</li>
+                            <li><strong>Trusted advice:</strong> Practical recommendations for better yield planning.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-section py-5" id="contact">
+            <div class="container">
+                <div class="row justify-content-center text-center mb-4">
+                    <div class="col-lg-8">
+                        <h3 class="section-title">Get in touch</h3>
+                        <p class="text-muted">Questions? Want help with your AYP setup? Reach out and we’ll connect you with our agriculture insights team.</p>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="contact-card p-4 rounded-4">
+                            <h5>Contact details</h5>
+                            <p class="mb-2"><strong>Email:</strong> <a href="mailto:rockyDev068@gmail.com">rockyDev068@gmail.com</a></p>
+                            <p class="mb-2"><strong>Phone:</strong> +91 98765 43210</p>
+                            <p class="mb-0">Follow us on social media for the latest farming updates and product announcements.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="contact-card p-4 rounded-4">
+                            <h5>Send a message</h5>
+                            <form action="/contact?lang={{ lang }}" method="POST" class="mt-3">
+                                <input type="hidden" name="lang" value="{{ lang }}">
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Your Name</label>
+                                    <input type="text" name="name" class="form-control" placeholder="First and last name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Email</label>
+                                    <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Message</label>
+                                    <textarea name="message" class="form-control" rows="4" placeholder="How can we help you?" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary">Send message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer py-4">
+        <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 text-muted">
+            <span>&copy; 2026 AYP. Modern agriculture intelligence.</span>
+            <div class="footer-links d-flex gap-3">
+                <a href="#features" class="text-muted text-decoration-none">Features</a>
+                <a href="#how-it-works" class="text-muted text-decoration-none">Plans</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const langSelect = document.getElementById('langSelect');
+        if (langSelect) {
+            langSelect.addEventListener('change', () => {
+                const params = new URLSearchParams(window.location.search);
+                params.set('lang', langSelect.value);
+                window.location.search = params.toString();
+            });
+        }
+    </script>
+</body>
+</html>
