@@ -436,6 +436,13 @@ def predict():
         session['last_model_name'] = model_name
         session['last_user'] = user
         session['last_lang'] = lang
+        session['last_inputs'] = {
+            'Fertilizer': input_values[0],
+            'Temperature': input_values[1],
+            'Nitrogen': input_values[2],
+            'Phosphorus': input_values[3],
+            'Potassium': input_values[4],
+        }
 
         print(f"🎯 Predicted Yield: {prediction_value:.2f} kg/hectare")
 
@@ -463,6 +470,8 @@ def result():
     if prediction is None:
         return redirect(url_for('home', lang=lang, user=user))
 
+    last_inputs = session.get('last_inputs', {})
+
     return render_template(
         'result.html',
         prediction=prediction,
@@ -470,6 +479,7 @@ def result():
         lang=lang,
         model_name=model_name_session,
         user=user,
+        inputs=last_inputs,
     )
 
 if __name__ == "__main__":
